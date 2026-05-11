@@ -11,22 +11,22 @@ using E_Commerce.Helpers;
 
 namespace E_Commerce.Controllers
 {
-    public class CategoriesController : Controller
+    public class BrandsController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public CategoriesController(ApplicationDbContext context)
+        public BrandsController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: Categories
+        // GET: Brands
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            return View(await _context.Brands.ToListAsync());
         }
 
-        // GET: Categories/Details/5
+        // GET: Brands/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,45 +34,47 @@ namespace E_Commerce.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories
+            var brand = await _context.Brands
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
+            if (brand == null)
             {
                 return NotFound();
             }
 
-            return View(category);
+            return View(brand);
         }
 
-        // GET: Categories/Create
+        // GET: Brands/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Categories/Create
+        // POST: Brands/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description")] Category category , IFormFile? ImageUrl)
+        public async Task<IActionResult> Create([Bind("Name")] Brand brand , IFormFile? ImageUrl)
+        {
         {
             if (ModelState.IsValid)
             {
                 if (ImageUrl != null)
                 {
-                    category.ImagePath = await ImageHelper.UploadFileAsync(ImageUrl, "categories");
+                    brand.ImageUrl = await ImageHelper.UploadFileAsync(ImageUrl, "brands");
                 }
 
-                _context.Add(category);
+                _context.Add(brand);
                 await _context.SaveChangesAsync();
-                TempData["SuccessMessage"] = "Category created successfully!";
+                TempData["SuccessMessage"] = "Brand created successfully!";
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
+            return View(brand);
+        }
         }
 
-        // GET: Categories/Edit/5
+        // GET: Brands/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,22 +82,23 @@ namespace E_Commerce.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            var brand = await _context.Brands.FindAsync(id);
+            if (brand == null)
             {
                 return NotFound();
             }
-            return View(category);
+            return View(brand);
         }
 
-        // POST: Categories/Edit/5
+        // POST: Brands/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-            public async Task<IActionResult> Edit(int id, [Bind("Name,Description,ImagePath,Id,IsDeleted")] Category category, IFormFile? NewImagePath)
+
+        public async Task<IActionResult> Edit(int id, [Bind("Name,Description,ImagePath,Id,IsDeleted")] Brand brand, IFormFile? NewImagePath)
         {
-            if (id != category.Id)
+            if (id != brand.Id)
             {
                 return NotFound();
             }
@@ -106,20 +109,20 @@ namespace E_Commerce.Controllers
                 {
                     if (NewImagePath != null)
                     {
-                        category.ImagePath = await ImageHelper.UploadFileAsync(NewImagePath, "categories");
+                        brand.ImageUrl = await ImageHelper.UploadFileAsync(NewImagePath, "brands");
                     }
 
 
-                    category.ModifcationDate = DateTime.Now;
-                    _context.Update(category);
+                    brand.ModifcationDate = DateTime.Now;
+                    _context.Update(brand);
                     await _context.SaveChangesAsync();
-                    TempData["SuccessMessage"] = "Category updated successfully!";
+                    TempData["SuccessMessage"] = "Brand updated successfully!";
 
 
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.Id))
+                    if (!BrandExists(brand.Id))
                     {
                         return NotFound();
                     }
@@ -131,48 +134,29 @@ namespace E_Commerce.Controllers
 
                 return RedirectToAction(nameof(Index));
             }
-            return View(category);
-        }
-      
-
-        // GET: Categories/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (category == null)
-            {
-                return NotFound();
-            }
-
-            return View(category);
+            return View(brand);
         }
 
-        // POST: Categories/Delete/5
+        // POST: Brands/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
-            if (category != null)
+            var brand = await _context.Brands.FindAsync(id);
+            if (brand != null)
             {
-                _context.Categories.Remove(category);
+                _context.Brands.Remove(brand);
             }
 
             await _context.SaveChangesAsync();
-            TempData["SuccessMessage"] = "Category deleted successfully!";
+            TempData["SuccessMessage"] = "Brand deleted successfully!";
 
             return RedirectToAction(nameof(Index));
         }
 
-        private bool CategoryExists(int id)
+        private bool BrandExists(int id)
         {
-            return _context.Categories.Any(e => e.Id == id);
+            return _context.Brands.Any(e => e.Id == id);
         }
     }
 }

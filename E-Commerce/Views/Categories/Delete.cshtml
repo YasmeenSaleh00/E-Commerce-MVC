@@ -10,48 +10,53 @@
 <div>
     <h4>Category</h4>
     <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ImagePath)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ImagePath)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreationDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreationDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.ModifcationDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ModifcationDate)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsDeleted)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsDeleted)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
-</div>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+                <div class="card delete-card">
+                    <div class="delete-header">
+                        <i class="bi bi-exclamation-triangle-fill fs-1 mb-2"></i>
+                        <h2 class="mb-0">Delete Confirmation</h2>
+                    </div>
+
+                    <div class="card-body p-4 p-md-5">
+                        <div class="warning-box">
+                            <i class="bi bi-info-circle-fill me-2"></i>
+                            Are you sure you want to permanently delete this category? This action cannot be undone.
+                        </div>
+
+                        <div class="row align-items-center">
+                            <div class="col-md-4 text-center mb-4 mb-md-0">
+                                <img src="@Model.ImagePath" width="180" height="180" class="img-delete-preview" alt="Category Image" />
+                            </div>
+
+                            <div class="col-md-8">
+                                <div class="info-label">Category Name</div>
+                                <div class="info-value fw-bold">@Model.Name</div>
+
+                                <div class="info-label">Description</div>
+                                <div class="info-value small">@Model.Description</div>
+
+                                <div class="info-label">Created On</div>
+                                <div class="info-value small">@Model.CreationDate?.ToString("dd MMM yyyy")</div>
+                            </div>
+                        </div>
+
+                        <hr class="my-4" style="opacity: 0.1;" />
+
+                        <div class="d-flex justify-content-center gap-3">
+                            <form asp-action="Delete">
+                                <input type="hidden" asp-for="Id" />
+                                <button type="submit" class="btn btn-danger-custom">
+                                    <i class="bi bi-trash3 me-1"></i> Confirm Delete
+                                </button>
+                            </form>
+                            <a asp-action="Index" class="btn btn-cancel">
+                                Cancel & Go Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
