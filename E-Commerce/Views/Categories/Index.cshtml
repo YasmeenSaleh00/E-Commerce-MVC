@@ -4,56 +4,58 @@
     ViewData["Title"] = "Categories";
 }
 
-<div class="container mt-5">
-
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="text-secondary fw-bold">Categories</h2>
-       
-    </div>
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            <div class="col-md-4 mb-4">
-
-                <div class="card shadow-sm border-0 h-100">
-
-                    <img src="@item.ImagePath"
-                         class="card-img-top"
-                         style="height:200px; object-fit:cover;" />
-
-                    <div class="card-body">
-
-                        <h5 class="card-title fw-bold">@item.Name</h5>
-
-                        <p class="card-text text-muted" style="min-height:60px;">
-                            @item.Description
-                        </p>
-
-                        @if (item.IsDeleted == true)
-                        {
-                            <span class="badge bg-danger">Not Active</span>
-                        }
-                        else
-                        {
-                            <span class="badge bg-success">Active</span>
-                        }
-
-                    </div>
-
-                    <div class="card-footer bg-white border-0 d-flex justify-content-between">
-
-                        <a asp-action="Details" asp-route-id="@item.Id"
-                           class="btn btn-sm btn-outline-info">
-                            Details
-                        </a>
-
-                       
-
-                    </div>
-
-                </div>
-
+<div id="page-content">
+    <!--Breadcrumbs-->
+    <div class="breadcrumbs-wrapper">
+        <div class="container">
+            <div class="breadcrumbs">
+                <a asp-area="" asp-controller="Home" asp-action="Index" title="Back to the home page">Home</a>
+                <span aria-hidden="true">|</span>
+                <span>Categories</span>
             </div>
-        }
+        </div>
+    </div>
+    <!--End Breadcrumbs-->
+
+    <div class="container">
+        <div class="page-title text-center mb-5">
+            <h1>Our Collections</h1>
+        </div>
+
+        <!--Category Masonary Grid-->
+        <div class="collection-banners style2">
+            <div class="grid-masonary collection-page-grid style2">
+                <div class="grid-sizer col-sm-6 col-md-4 col-lg-4"></div>
+                <div class="row">
+                    @foreach (var item in Model)
+                    {
+                        <!-- نتحقق فقط من الفئات غير المحذوفة إذا كنتِ ترغبين في إخفائها -->
+                        @if (item.IsDeleted != true)
+                        {
+                            <div class="col-12 col-sm-6 col-md-4 col-lg-4 collection-page-item mb-4">
+                                <div class="collection-grid-item">
+                                    <div class="img">
+                                        <a asp-action="Details" asp-route-id="@item.Id" class="collection-grid-item__link">
+                                            <img class="blur-up lazyload"
+                                                 src="@item.ImagePath"
+                                                 alt="@item.Name"
+                                                 style="height:350px; width:100%; object-fit:cover;" />
+
+                                            <span class="details">
+                                                <span class="inner">
+                                                    <span class="collection-grid-item__title">@item.Name</span>
+                                                    <span class="counts">@item.Description</span>
+                                                </span>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <!--End Category Masonary Grid-->
     </div>
 </div>
