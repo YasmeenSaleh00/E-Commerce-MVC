@@ -14,7 +14,8 @@ namespace E_Commerce.Data
         {
         }
         public DbSet<Category> Categories { get; set; }
-        public DbSet<Brand> Brands { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Testimonial> Testimonials { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -30,6 +31,9 @@ namespace E_Commerce.Data
                         .Property("CreationDate")
                         .HasDefaultValueSql("GETDATE()")
                         .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+                    builder.Entity<Testimonial>()
+        .HasIndex(t => t.UserId)
+        .IsUnique();
                 }
             }
 
