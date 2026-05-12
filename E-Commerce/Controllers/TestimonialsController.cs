@@ -50,47 +50,31 @@ namespace E_Commerce.Controllers
         // GET: Testimonials/Create
         public IActionResult Create()
         {
-            ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
             return View();
         }
 
-        // POST: Testimonials/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
-        public async Task<IActionResult> Create([Bind("Content")] Testimonial testimonial)
+        public async Task<IActionResult> Create(Testimonial model)
+        {
+            model.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            model.Status = TestimonialStatus.Pending;
+
+            _context.Testimonials.Add(model);
+            await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Your Feedback is Pending";
+            return RedirectToAction("MyTestimonials");
+        }
+
+        public IActionResult MyTestimonials()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            ModelState.Remove("UserId");
-            ModelState.Remove("CreationDate");
-            ModelState.Remove("User"); 
+            var data = _context.Testimonials
+                .Where(x => x.UserId == userId)
+                .ToList();
 
-            if (ModelState.IsValid)
-            {
-                var alreadyExists = await _context.Testimonials.AnyAsync(t => t.UserId == userId);
-                if (alreadyExists)
-                {
-                    TempData["Error"] = "You have already submitted a testimonial.";
-                    return RedirectToAction(nameof(Index));
-                }
-
-                testimonial.UserId = userId;
-               
-
-                _context.Add(testimonial);
-                await _context.SaveChangesAsync();
-
-                TempData["Success"] = "Testimonial submitted successfully and pending approval.";
-                return RedirectToAction(nameof(Index));
-            }
-
-            return View(testimonial);
+            return View(data);
         }
-
-
         // GET: Testimonials/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {

@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Testimonial>
+
+<div class="container mt-4">
+
+    <h3 class="mb-4">Testimonials Dashboard</h3>
+
+    <div class="mb-3">
+        <a asp-area="Admin" asp-action="Index" class="btn btn-secondary btn-sm">All</a>
+        <a asp-area="Admin" asp-action="Index" asp-route-status="pending" class="btn btn-warning btn-sm">Pending</a>
+        <a asp-area="Admin" asp-action="Index" asp-route-status="approved" class="btn btn-success btn-sm">Approved</a>
+        <a asp-area="Admin" asp-action="Index" asp-route-status="rejected" class="btn btn-danger btn-sm">Rejected</a>
+    </div>
+
+    <div class="row">
+
+        @foreach (var item in Model)
+        {
+            <div class="col-md-4 mb-3">
+
+                <div class="card shadow-sm border-0 h-100">
+
+                    <div class="card-body">
+
+                        <h6 class="text-muted">@item.User?.UserName</h6>
+
+                        <p>@item.Content</p>
+
+                        @if (item.Status == TestimonialStatus.Pending)
+                        {
+                            <span class="badge bg-warning">Pending</span>
+                        }
+                        else if (item.Status == TestimonialStatus.Approved)
+                        {
+                            <span class="badge bg-success">Approved</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">Rejected</span>
+                        }
+
+                    </div>
+
+                    <div class="card-footer bg-white border-0 d-flex justify-content-between">
+
+                        <a asp-area="Admin" asp-action="Approve" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-success">Approve</a>
+
+                        <a asp-area="Admin" asp-action="Reject" asp-route-id="@item.Id"
+                           class="btn btn-sm btn-danger">Reject</a>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+</div>

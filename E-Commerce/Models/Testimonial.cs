@@ -6,8 +6,14 @@ namespace E_Commerce.Models
     {
         [Required]
         public string Content { get; set; }
-        public bool IsApproved { get; set; } = false;
+        public TestimonialStatus Status { get; set; } = TestimonialStatus.Pending;
         public string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }
+    }
+    public enum TestimonialStatus
+    {
+        Pending,
+        Approved,
+        Rejected
     }
 }
