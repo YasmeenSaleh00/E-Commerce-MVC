@@ -1,0 +1,28 @@
+﻿@model E_Commerce.Models.Testimonial
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container mt-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <h4 class="mb-3">Add Testimonial</h4>
+
+            <form asp-action="Create">
+                <textarea asp-for="Content" class="form-control" rows="4"
+                          placeholder="Write your feedback..."></textarea>
+
+                <span asp-validation-for="Content" class="text-danger"></span>
+
+                <button type="submit" class="btn btn-primary mt-3">
+                    Submit
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

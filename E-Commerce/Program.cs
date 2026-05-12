@@ -16,6 +16,7 @@ namespace E_Commerce
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+
             
 
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => {
@@ -84,6 +85,10 @@ namespace E_Commerce
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.MapControllerRoute(
+    name: "areas",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
 
             app.MapControllerRoute(
                 name: "default",

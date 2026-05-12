@@ -1,0 +1,19 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace E_Commerce.Models
+{
+    public class Testimonial:MainEntity
+    {
+        [Required]
+        public string Content { get; set; }
+        public TestimonialStatus Status { get; set; } = TestimonialStatus.Pending;
+        public string UserId { get; set; }
+        public virtual ApplicationUser User { get; set; }
+    }
+    public enum TestimonialStatus
+    {
+        Pending,
+        Approved,
+        Rejected
+    }
+}

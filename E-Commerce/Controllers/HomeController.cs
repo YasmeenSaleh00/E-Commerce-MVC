@@ -19,7 +19,7 @@ namespace E_Commerce.Controllers
             {
                 if (User.IsInRole("Admin"))
                 {
-                    return RedirectToAction("Index", "Admin");
+                    return RedirectToAction("Index", "Dashboard", new { area = "Admin" });
                 }
 
             }
