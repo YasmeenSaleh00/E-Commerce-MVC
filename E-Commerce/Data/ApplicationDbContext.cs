@@ -17,8 +17,9 @@ namespace E_Commerce.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Testimonial> Testimonials { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductImage> ProductImages { get; set; }
 
-        protected override void OnModelCreating(ModelBuilder builder)
+       /* protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             foreach (var entityType in builder.Model.GetEntityTypes())
@@ -39,6 +40,6 @@ namespace E_Commerce.Data
                 }
             }
 
-        }
+        }*/
     }
 }

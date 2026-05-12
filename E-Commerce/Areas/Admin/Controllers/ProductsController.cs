@@ -11,8 +11,9 @@ using E_Commerce.DTOs;
 using E_Commerce.Helpers;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace E_Commerce.Controllers
+namespace E_Commerce.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class ProductsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -27,6 +28,7 @@ namespace E_Commerce.Controllers
         {
             return View(await _context.Products
     .Include(p => p.Images)
+    .Include(p=>p.Category)
     .ToListAsync());
         }
 
@@ -40,6 +42,7 @@ namespace E_Commerce.Controllers
 
             var product = await _context.Products
      .Include(p => p.Images)
+     .Include(p => p.Category)
      .FirstOrDefaultAsync(m => m.Id == id);
 
             if (product == null)
@@ -53,6 +56,7 @@ namespace E_Commerce.Controllers
         // GET: Products/Create
         public IActionResult Create()
         {
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name");
             return View();
         }
 
@@ -72,6 +76,7 @@ namespace E_Commerce.Controllers
                 Price = dto.Price,
                 Quantity = dto.Quantity,
                 ProductStatus = dto.ProductStatus,
+                CategoryId = dto.CategoryId,
                 CreationDate = DateTime.Now,
                 ModificationDate = DateTime.Now,
                 Images = new List<ProductImage>()
@@ -121,6 +126,7 @@ namespace E_Commerce.Controllers
 
             var product = await _context.Products
        .Include(p => p.Images)
+       .Include(p => p.Category)
        .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product == null)
@@ -130,6 +136,7 @@ namespace E_Commerce.Controllers
             {
                 Id = product.Id,
                 Name = product.Name,
+                CategoryId = product.CategoryId,
                 Price = product.Price,
                 Quantity = product.Quantity,
                 ProductStatus = product.ProductStatus,
@@ -142,6 +149,7 @@ namespace E_Commerce.Controllers
     .ToList()
             };
 
+            ViewBag.Categories = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(dto);
         }
 
@@ -175,6 +183,7 @@ namespace E_Commerce.Controllers
             product.Price = dto.Price;
             product.Quantity = dto.Quantity;
             product.ProductStatus = dto.ProductStatus;
+            product.CategoryId = dto.CategoryId;
             product.ModificationDate = DateTime.Now;
 
             //delete images
@@ -243,6 +252,8 @@ namespace E_Commerce.Controllers
             }
 
             var product = await _context.Products
+                .Include(p => p.Images)
+     .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {

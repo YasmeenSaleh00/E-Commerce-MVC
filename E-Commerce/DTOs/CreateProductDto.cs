@@ -10,6 +10,8 @@ namespace E_Commerce.DTOs
         public int Quantity { get; set; }
         public ProductStatus ProductStatus { get; set; }
 
+        public int CategoryId { get; set; }
+
         public List<IFormFile>? Images { get; set; }
 
         public List<ExistingImageDto>? ExistingImages { get; set; }

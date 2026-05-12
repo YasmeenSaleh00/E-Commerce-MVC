@@ -18,5 +18,9 @@
         public ProductStatus ProductStatus { get; set; }
         
         public List<ProductImage> Images { get; set; }
+
+        public int CategoryId { get; set; }
+
+        public Category Category { get; set; }
     }
 }

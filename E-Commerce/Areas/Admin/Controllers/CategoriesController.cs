@@ -66,8 +66,14 @@ namespace E_Commerce.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Description")] Category category, IFormFile? ImageUrl)
+        public async Task<IActionResult> Create(/*[Bind("Name,Description")]*/ [FromForm] Category category, IFormFile? ImageUrl)
         {
+
+            category.CreationDate = DateTime.Now;
+            category.ModificationDate = DateTime.Now;
+            category.IsDeleted = false;
+
+
             if (ModelState.IsValid)
             {
                 if (ImageUrl != null)
@@ -75,11 +81,13 @@ namespace E_Commerce.Areas.Admin.Controllers
                     category.ImagePath = await ImageHelper.UploadFileAsync(ImageUrl, "categories");
                 }
 
+                
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 TempData["SuccessMessage"] = "Category created successfully!";
                 return RedirectToAction(nameof(Index));
             }
+         
             return View(category);
         }
 
@@ -121,7 +129,7 @@ namespace E_Commerce.Areas.Admin.Controllers
                     }
 
 
-                    category.ModifcationDate = DateTime.Now;
+                    category.ModificationDate = DateTime.Now;
                     _context.Update(category);
                     await _context.SaveChangesAsync();
                     TempData["SuccessMessage"] = "Category updated successfully!";

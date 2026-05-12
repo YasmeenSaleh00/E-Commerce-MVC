@@ -2,8 +2,12 @@
 
 namespace E_Commerce.Models
 {
-    public class Testimonial:MainEntity
+    public class Testimonial
     {
+        public int Id { get; set; }
+        public bool IsDeleted { get; set; }
+        public DateTime CreationDate { get; set; }
+        public DateTime ModificationDate { get; set; }
         [Required]
         public string Content { get; set; }
         public TestimonialStatus Status { get; set; } = TestimonialStatus.Pending;
