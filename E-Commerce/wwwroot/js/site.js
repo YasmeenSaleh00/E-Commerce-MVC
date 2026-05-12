@@ -1,4 +1,18 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿document.addEventListener("DOMContentLoaded", function () {
+    // Automatically highlight active sidebar links based on URL
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll('.nav-link');
 
-// Write your JavaScript code.
+    navLinks.forEach(link => {
+        if (link.getAttribute('href') === currentPath) {
+            link.classList.add('active');
+        }
+    });
+
+    // Optional: Add a subtle flicker effect to neon titles on load
+    const brand = document.querySelector('h4');
+    if (brand) {
+        brand.style.opacity = '0.8';
+        setTimeout(() => { brand.style.opacity = '1'; }, 100);
+    }
+});

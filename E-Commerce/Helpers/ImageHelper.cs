@@ -1,5 +1,6 @@
 ﻿namespace E_Commerce.Helpers
 {
+
     public static class ImageHelper
     {
         private static readonly string[] AllowedExtensions = { ".jpg", ".jpeg", ".png", ".gif", ".webp" };

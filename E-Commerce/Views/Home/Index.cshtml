@@ -1,8 +1,110 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Operations Dashboard";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container-fluid">
+    <div class="mb-4">
+        <h1 class="display-5 fw-bold" style="color: var(--neon-primary); text-shadow: 0 0 10px var(--border-glow);">
+            System Overview
+        </h1>
+        <p class="text-secondary">Real-time gaming equipment sales and logistics monitoring.</p>
+    </div>
+
+    <!-- Stat Cards Section -->
+    <div class="row g-4 mb-4">
+        <!-- Orders -->
+        <div class="col-md-4">
+            <div class="admin-card">
+                <div class="d-flex align-items-center mb-2">
+                    <div class="p-2 rounded me-3" style="background: rgba(255, 193, 7, 0.1);">
+                        <i class="bi bi-cart-fill text-warning" style="font-size: 1.5rem;"></i>
+                    </div>
+                    <h6 class="mb-0 text-uppercase tracking-wider">Orders</h6>
+                </div>
+                <div class="d-flex justify-content-between align-items-end">
+                    <h2 class="fw-bold mb-0">5,312</h2>
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success">
+                        2.29% <i class="bi bi-arrow-up-short"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue -->
+        <div class="col-md-4">
+            <div class="admin-card">
+                <div class="d-flex align-items-center mb-2">
+                    <div class="p-2 rounded me-3" style="background: rgba(0, 242, 255, 0.1);">
+                        <i class="bi bi-currency-dollar" style="font-size: 1.5rem; color: var(--neon-primary);"></i>
+                    </div>
+                    <h6 class="mb-0 text-uppercase tracking-wider">Revenue</h6>
+                </div>
+                <div class="d-flex justify-content-between align-items-end">
+                    <h2 class="fw-bold mb-0 text-white">$120,000</h2>
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success">
+                        2.19% <i class="bi bi-arrow-up-short"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Conversion -->
+        <div class="col-md-4">
+            <div class="admin-card">
+                <div class="d-flex align-items-center mb-2">
+                    <div class="p-2 rounded me-3" style="background: rgba(112, 0, 255, 0.1);">
+                        <i class="bi bi-graph-up" style="font-size: 1.5rem; color: var(--neon-secondary);"></i>
+                    </div>
+                    <h6 class="mb-0 text-uppercase tracking-wider">Conversion</h6>
+                </div>
+                <div class="d-flex justify-content-between align-items-end">
+                    <h2 class="fw-bold mb-0">3.5%</h2>
+                    <span class="badge bg-danger bg-opacity-10 text-danger border border-danger">
+                        3.19% <i class="bi bi-arrow-down-short"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="admin-card p-0 overflow-hidden">
+        <div class="card-header bg-transparent border-secondary p-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 text-white"><i class="bi bi-lightning-charge me-2"></i>Recent Orders</h5>
+            <span class="text-muted small">Live updates enabled</span>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-dark table-hover align-middle mb-0" style="--bs-table-bg: transparent;">
+                <thead class="bg-black bg-opacity-50">
+                    <tr class="text-secondary border-bottom border-secondary">
+                        <th class="ps-3">Order ID</th>
+                        <th>Amount</th>
+                        <th>Method</th>
+                        <th>Status</th>
+                        <th class="text-end pe-3">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-bottom border-secondary border-opacity-25">
+                        <td class="ps-3 fw-bold text-info">#DU005</td>
+                        <td>$150.00</td>
+                        <td>Standard</td>
+                        <td><span class="badge btn-neon" style="font-size: 0.7rem;">SHIPPED</span></td>
+                        <td class="text-end pe-3">
+                            <button class="btn btn-sm btn-outline-light px-3">View</button>
+                        </td>
+                    </tr>
+                    <tr class="border-bottom border-secondary border-opacity-25">
+                        <td class="ps-3 fw-bold text-info">#DU004</td>
+                        <td>$200.00</td>
+                        <td>Express</td>
+                        <td><span class="badge border border-warning text-warning" style="font-size: 0.7rem;">PENDING</span></td>
+                        <td class="text-end pe-3">
+                            <button class="btn btn-sm btn-outline-light px-3">View</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
