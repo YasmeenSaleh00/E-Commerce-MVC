@@ -1,0 +1,72 @@
+@model IEnumerable<E_Commerce.Models.Order>
+
+@{
+    ViewData["Title"] = "Orders";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="d-flex gap-2 mb-4 flex-wrap">
+    <a asp-action="Index" class="btn btn-sm @(ViewBag.CurrentStatus == null ? "btn-dark" : "btn-outline-dark")">All</a>
+    @foreach (var status in Enum.GetValues<E_Commerce.Models.OrderStatus>())
+    {
+        <a asp-action="Index" asp-route-status="@status"
+           class="btn btn-sm @(ViewBag.CurrentStatus == status.ToString() ? "btn-dark" : "btn-outline-dark")">@status</a>
+    }
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-0">
+        @if (!Model.Any())
+        {
+            <div class="text-center py-5 text-muted">
+                <i class="bi bi-inbox fs-1"></i>
+                <p class="mt-2">No orders found.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0 align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Order #</th>
+                            <th>Customer</th>
+                            <th>Email</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var order in Model)
+                        {
+                            var badge = order.Status switch {
+                                E_Commerce.Models.OrderStatus.Pending => "bg-warning text-dark",
+                                E_Commerce.Models.OrderStatus.Processing => "bg-info text-dark",
+                                E_Commerce.Models.OrderStatus.Shipped => "bg-primary",
+                                E_Commerce.Models.OrderStatus.Delivered => "bg-success",
+                                E_Commerce.Models.OrderStatus.Cancelled => "bg-danger",
+                                _ => "bg-secondary"
+                            };
+                            <tr>
+                                <td class="ps-4 fw-semibold">#@order.Id</td>
+                                <td>@order.ShippingFirstName @order.ShippingLastName</td>
+                                <td class="text-muted small">@order.User?.Email</td>
+                                <td>@order.OrderItems.Count</td>
+                                <td class="fw-semibold">$@order.Total.ToString("0.00")</td>
+                                <td><span class="badge @badge">@order.Status</span></td>
+                                <td class="text-muted small">@order.OrderDate.ToLocalTime().ToString("MMM dd, yyyy")</td>
+                                <td class="pe-3">
+                                    <a asp-action="Details" asp-route-id="@order.Id"
+                                       class="btn btn-sm btn-outline-secondary">Details</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </div>
+</div>

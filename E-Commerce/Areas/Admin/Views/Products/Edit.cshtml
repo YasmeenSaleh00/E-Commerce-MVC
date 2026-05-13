@@ -1,97 +1,87 @@
-﻿@model E_Commerce.DTOs.CreateProductDto
+@model E_Commerce.DTOs.CreateProductDto
 @using E_Commerce.Models
+
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Product";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Edit</h1>
+<a asp-action="Index" class="btn btn-outline-secondary mb-4"><i class="bi bi-arrow-left me-1"></i>Back</a>
 
-<h4>Product</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4" >
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+        <h5 class="fw-bold mb-4">Edit Product</h5>
         <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-
-
-            </div>
-
-            <div class="form-group">
-                <label>Category</label>
-                <select asp-for="CategoryId" class="form-control"
-                        asp-items="ViewBag.Categories">
-                    <option value="">-- Select Category --</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quantity" class="control-label"></label>
-                <input asp-for="Quantity" class="form-control" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-           
-            
-            <div class="form-group">
-                <label asp-for="ProductStatus" class="control-label"></label>
-                <select asp-for="ProductStatus"
-                        asp-items="Html.GetEnumSelectList<ProductStatus>()"
-                        class="form-control"></select>
-                <span asp-validation-for="ProductStatus" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label>Current Images</label>
-
-                <div class="d-flex gap-3 flex-wrap">
-
-                    @if (Model.ExistingImages != null)
-                    {
-                        foreach (var image in Model.ExistingImages)
-                        {
-                            <div>
-                                <img src="@image.ImageUrl"
-                                     width="120"
-                                     height="120"
-                                     style="object-fit:cover;border:1px solid #ccc;padding:5px;" />
-
-                                <div class="mt-1">
-                                    <input type="checkbox"
-                                           name="DeletedImageIds"
-                                           value="@image.Id" />
-
-                                    <label>Delete</label>
-                                </div>
-                            </div>
-                        }
-                    }
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label asp-for="Name" class="form-label">Product Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger small"></span>
                 </div>
-            </div>
-            <div class="form-group">
-                <label asp-for="Images" class="control-label"></label>
-                <input asp-for="Images"
-                       type="file"
-                       multiple
-                       accept=".jpg,.jpeg,.png,.webp"
-                       class="form-control" />
-                <span asp-validation-for="Images" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <div class="col-md-4">
+                    <label asp-for="CategoryId" class="form-label">Category</label>
+                    <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Categories">
+                        <option value="">-- Select Category --</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <label asp-for="Description" class="form-label">Description</label>
+                    <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Price" class="form-label">Price ($)</label>
+                    <input asp-for="Price" class="form-control" type="number" step="0.01" min="0" />
+                    <span asp-validation-for="Price" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="Quantity" class="form-label">Stock Quantity</label>
+                    <input asp-for="Quantity" class="form-control" type="number" min="0" />
+                    <span asp-validation-for="Quantity" class="text-danger small"></span>
+                </div>
+                <div class="col-md-4">
+                    <label asp-for="ProductStatus" class="form-label">Status</label>
+                    <select asp-for="ProductStatus" asp-items="Html.GetEnumSelectList<ProductStatus>()" class="form-select"></select>
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input asp-for="IsFeatured" class="form-check-input" type="checkbox" />
+                        <label asp-for="IsFeatured" class="form-check-label">
+                            Feature this product on the homepage
+                        </label>
+                    </div>
+                </div>
+
+                @if (Model.ExistingImages != null && Model.ExistingImages.Any())
+                {
+                    <div class="col-12">
+                        <label class="form-label">Current Images</label>
+                        <div class="d-flex gap-3 flex-wrap">
+                            @foreach (var image in Model.ExistingImages)
+                            {
+                                <div class="text-center">
+                                    <img src="@image.ImageUrl" width="100" height="100" style="object-fit:cover;border-radius:8px;border:1px solid #ddd;" />
+                                    <div class="mt-1 form-check">
+                                        <input type="checkbox" name="DeletedImageIds" value="@image.Id" class="form-check-input" id="del_@image.Id" />
+                                        <label class="form-check-label text-danger small" for="del_@image.Id">Delete</label>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+
+                <div class="col-12">
+                    <label asp-for="Images" class="form-label">Add New Images</label>
+                    <input asp-for="Images" type="file" multiple accept=".jpg,.jpeg,.png,.webp" class="form-control" />
+                </div>
+                <div class="col-12 mt-2">
+                    <button type="submit" class="btn btn-dark px-4">Save Changes</button>
+                </div>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

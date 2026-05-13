@@ -73,8 +73,10 @@ namespace E_Commerce.Areas.Admin.Controllers
             Product product = new Product
             {
                 Name = dto.Name,
+                Description = dto.Description,
                 Price = dto.Price,
                 Quantity = dto.Quantity,
+                IsFeatured = dto.IsFeatured,
                 ProductStatus = dto.ProductStatus,
                 CategoryId = dto.CategoryId,
                 CreationDate = DateTime.Now,
@@ -136,9 +138,11 @@ namespace E_Commerce.Areas.Admin.Controllers
             {
                 Id = product.Id,
                 Name = product.Name,
+                Description = product.Description,
                 CategoryId = product.CategoryId,
                 Price = product.Price,
                 Quantity = product.Quantity,
+                IsFeatured = product.IsFeatured,
                 ProductStatus = product.ProductStatus,
                 ExistingImages = product.Images
     .Select(i => new ExistingImageDto
@@ -180,8 +184,10 @@ namespace E_Commerce.Areas.Admin.Controllers
             }
 
             product.Name = dto.Name;
+            product.Description = dto.Description;
             product.Price = dto.Price;
             product.Quantity = dto.Quantity;
+            product.IsFeatured = dto.IsFeatured;
             product.ProductStatus = dto.ProductStatus;
             product.CategoryId = dto.CategoryId;
             product.ModificationDate = DateTime.Now;

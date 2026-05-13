@@ -1,0 +1,77 @@
+@model E_Commerce.Models.Order
+
+@{
+    ViewData["Title"] = "Order Confirmed";
+}
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <div class="mb-3">
+            <i class="bi bi-check-circle-fill text-success" style="font-size:4rem;"></i>
+        </div>
+        <h2 class="fw-bold">Thank You for Your Order!</h2>
+        <p class="text-muted">Your order <strong>#@Model.Id</strong> has been placed successfully.</p>
+        <p class="text-muted small">A confirmation will be kept in your order history.</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Order Details -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-4 text-center">
+                            <div class="text-muted small text-uppercase">Order #</div>
+                            <div class="fw-bold">#@Model.Id</div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="text-muted small text-uppercase">Date</div>
+                            <div class="fw-bold">@Model.OrderDate.ToLocalTime().ToString("MMM dd, yyyy")</div>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="text-muted small text-uppercase">Status</div>
+                            <span class="badge bg-warning text-dark">@Model.Status</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Items -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">Items Ordered</h5>
+                    @foreach (var item in Model.OrderItems)
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <div>
+                                <div class="fw-semibold">@item.ProductName</div>
+                                <small class="text-muted">Qty: @item.Quantity × $@item.UnitPrice.ToString("0.00")</small>
+                            </div>
+                            <div class="fw-semibold">$@item.TotalPrice.ToString("0.00")</div>
+                        </div>
+                    }
+                    <hr />
+                    <div class="d-flex justify-content-between fw-bold fs-5">
+                        <span>Total Paid</span>
+                        <span>$@Model.Total.ToString("0.00")</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Shipping -->
+            <div class="card border-0 shadow-sm mb-4">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-2">Shipping To</h5>
+                    <p class="mb-1">@Model.ShippingFirstName @Model.ShippingLastName</p>
+                    <p class="mb-1 text-muted">@Model.ShippingAddress, @Model.ShippingCity</p>
+                    <p class="mb-0 text-muted">@Model.ShippingCountry @Model.ShippingPostalCode</p>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-dark px-5 me-2">Back to Home</a>
+                <a asp-controller="Products" asp-action="Index" class="btn btn-outline-dark px-5">Continue Shopping</a>
+            </div>
+        </div>
+    </div>
+</div>

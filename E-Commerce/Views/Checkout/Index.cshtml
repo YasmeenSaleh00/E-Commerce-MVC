@@ -1,0 +1,139 @@
+@model E_Commerce.Models.ShoppingCart
+
+@{
+    ViewData["Title"] = "Checkout";
+}
+
+<div class="container py-5">
+    <h2 class="fw-bold mb-4">Checkout</h2>
+
+    <div class="row g-4">
+        <!-- Left: Shipping + Payment -->
+        <div class="col-lg-7">
+            <form asp-action="PlaceOrder" method="post">
+                @Html.AntiForgeryToken()
+
+                <!-- Shipping -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3"><i class="bi bi-truck me-2"></i>Shipping Information</h5>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label">First Name <span class="text-danger">*</span></label>
+                                <input type="text" name="firstName" class="form-control" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Last Name <span class="text-danger">*</span></label>
+                                <input type="text" name="lastName" class="form-control" required />
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Address <span class="text-danger">*</span></label>
+                                <input type="text" name="address" class="form-control" placeholder="Street address" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">City <span class="text-danger">*</span></label>
+                                <input type="text" name="city" class="form-control" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Country <span class="text-danger">*</span></label>
+                                <input type="text" name="country" class="form-control" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Postal Code</label>
+                                <input type="text" name="postalCode" class="form-control" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Phone</label>
+                                <input type="tel" name="phone" class="form-control" />
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Order Notes</label>
+                                <textarea name="notes" class="form-control" rows="2" placeholder="Any special instructions..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment -->
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold mb-3"><i class="bi bi-credit-card me-2"></i>Payment Details</h5>
+                        <p class="text-muted small mb-3">This is a demo store. No real charge will be made.</p>
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label">Name on Card</label>
+                                <input type="text" class="form-control" placeholder="John Doe" />
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">Card Number</label>
+                                <input type="text" class="form-control" placeholder="1234 5678 9012 3456" maxlength="19"
+                                       oninput="this.value=this.value.replace(/[^0-9]/g,'').replace(/(.{4})/g,'$1 ').trim()" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Expiry Date</label>
+                                <input type="text" class="form-control" placeholder="MM/YY" maxlength="5" />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">CVV</label>
+                                <input type="text" class="form-control" placeholder="123" maxlength="4" />
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 mt-3">
+                            <i class="bi bi-credit-card fs-4 text-muted"></i>
+                            <i class="bi bi-paypal fs-4 text-muted"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-dark w-100 py-3 fw-semibold fs-5">
+                    <i class="bi bi-lock me-2"></i>Place Order
+                </button>
+            </form>
+        </div>
+
+        <!-- Right: Order Summary -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm sticky-top" style="top:20px;">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3">Order Summary</h5>
+                    @foreach (var item in Model.CartItems)
+                    {
+                        var img = item.Product?.Images?.FirstOrDefault()?.ImageUrl;
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            @if (!string.IsNullOrEmpty(img))
+                            {
+                                <img src="/@img.TrimStart('/')" style="width:48px;height:48px;object-fit:cover;border-radius:6px;" />
+                            }
+                            else
+                            {
+                                <div style="width:48px;height:48px;background:#f0f0f0;border-radius:6px;display:flex;align-items:center;justify-content:center;">
+                                    <i class="bi bi-image text-muted small"></i>
+                                </div>
+                            }
+                            <div class="flex-grow-1">
+                                <div class="fw-semibold small">@item.Product?.Name</div>
+                                <div class="text-muted small">Qty: @item.Quantity</div>
+                            </div>
+                            <div class="fw-semibold">$@item.SubTotal.ToString("0.00")</div>
+                        </div>
+                    }
+                    <hr />
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Subtotal</span>
+                        <span>$@Model.Total.ToString("0.00")</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="text-muted">Shipping</span>
+                        <span class="text-success">Free</span>
+                    </div>
+                    <hr />
+                    <div class="d-flex justify-content-between fw-bold fs-5">
+                        <span>Total</span>
+                        <span>$@Model.Total.ToString("0.00")</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

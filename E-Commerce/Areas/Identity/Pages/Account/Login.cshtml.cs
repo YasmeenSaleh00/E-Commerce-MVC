@@ -9,6 +9,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using E_Commerce.Models;
+using E_Commerce.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -22,11 +23,13 @@ namespace E_Commerce.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
+        private readonly CartService _cartService;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger, CartService cartService)
         {
             _signInManager = signInManager;
             _logger = logger;
+            _cartService = cartService;
         }
 
         /// <summary>
@@ -116,6 +119,10 @@ namespace E_Commerce.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
+                    var sessionId = _cartService.GetOrCreateSessionId(HttpContext.Session);
+                    var user = await _signInManager.UserManager.FindByEmailAsync(Input.Email);
+                    if (user != null)
+                        await _cartService.MergeGuestCartAsync(user.Id, sessionId);
                     return LocalRedirect(returnUrl);
                 }
                 if (result.RequiresTwoFactor)

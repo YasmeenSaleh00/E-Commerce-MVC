@@ -1,14 +1,172 @@
-﻿@* @{
-    ViewData["Title"] = "Operations Dashboard";
-}
-<h1>hello user</h1>
- *@
+@model IEnumerable<E_Commerce.Models.Product>
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<!-- Hero Section -->
+<section class="py-5 mb-4" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); border-radius: 16px;">
+    <div class="container py-4">
+        <div class="row align-items-center">
+            <div class="col-lg-7 text-white">
+                <p class="text-uppercase small fw-semibold mb-2" style="letter-spacing:3px; color:#e0c97f;">New Arrivals</p>
+                <h1 class="display-4 fw-bold mb-3">Discover Premium <br>Collections</h1>
+                <p class="text-white-50 mb-4 fs-5">Curated products crafted for those who appreciate quality and style.</p>
+                <div class="d-flex gap-3">
+                    <a asp-controller="Products" asp-action="Index" class="btn btn-light btn-lg px-4 fw-semibold">Shop Now</a>
+                    <a asp-controller="Categories" asp-action="Index" class="btn btn-outline-light btn-lg px-4">Browse Categories</a>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center d-none d-lg-block">
+                <i class="bi bi-bag-heart" style="font-size: 10rem; opacity: 0.15; color: white;"></i>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Feature Badges -->
+<section class="mb-5">
+    <div class="row g-3 text-center">
+        <div class="col-6 col-md-3">
+            <div class="p-3 border rounded-3 h-100">
+                <i class="bi bi-truck fs-3 text-dark mb-2 d-block"></i>
+                <div class="fw-semibold small">Free Shipping</div>
+                <div class="text-muted" style="font-size:0.78rem;">On all orders</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="p-3 border rounded-3 h-100">
+                <i class="bi bi-shield-check fs-3 text-dark mb-2 d-block"></i>
+                <div class="fw-semibold small">Secure Payment</div>
+                <div class="text-muted" style="font-size:0.78rem;">100% protected</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="p-3 border rounded-3 h-100">
+                <i class="bi bi-arrow-return-left fs-3 text-dark mb-2 d-block"></i>
+                <div class="fw-semibold small">Easy Returns</div>
+                <div class="text-muted" style="font-size:0.78rem;">30-day policy</div>
+            </div>
+        </div>
+        <div class="col-6 col-md-3">
+            <div class="p-3 border rounded-3 h-100">
+                <i class="bi bi-headset fs-3 text-dark mb-2 d-block"></i>
+                <div class="fw-semibold small">24/7 Support</div>
+                <div class="text-muted" style="font-size:0.78rem;">Always here to help</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Categories -->
+@if (ViewBag.Categories != null && ((IEnumerable<E_Commerce.Models.Category>)ViewBag.Categories).Any())
+{
+    <section class="mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h3 class="fw-bold mb-0">Shop by Category</h3>
+            <a asp-controller="Categories" asp-action="Index" class="text-dark text-decoration-none small fw-semibold">
+                View All <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+        <div class="row g-3">
+            @foreach (var cat in (IEnumerable<E_Commerce.Models.Category>)ViewBag.Categories)
+            {
+                <div class="col-6 col-md-4 col-lg-2">
+                    <a asp-controller="Products" asp-action="FilterByCategory" asp-route-categoryId="@cat.Id"
+                       class="text-decoration-none">
+                        <div class="card border-0 shadow-sm text-center p-3 h-100 category-card" style="transition:transform 0.2s;">
+                            @if (!string.IsNullOrEmpty(cat.ImagePath))
+                            {
+                                <img src="/@cat.ImagePath.TrimStart('/')" alt="@cat.Name"
+                                     style="width:60px;height:60px;object-fit:cover;border-radius:50%;margin:0 auto 10px;" />
+                            }
+                            else
+                            {
+                                <div style="width:60px;height:60px;background:#f0f0f0;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;">
+                                    <i class="bi bi-grid text-muted"></i>
+                                </div>
+                            }
+                            <div class="fw-semibold small text-dark">@cat.Name</div>
+                        </div>
+                    </a>
+                </div>
+            }
+        </div>
+    </section>
+}
+
+<!-- Featured Products -->
+<section class="mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold mb-0">Featured Products</h3>
+        <a asp-controller="Products" asp-action="Index" class="text-dark text-decoration-none small fw-semibold">
+            View All <i class="bi bi-arrow-right ms-1"></i>
+        </a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center py-5 text-muted border rounded-3">
+            <i class="bi bi-star fs-1"></i>
+            <p class="mt-2">No featured products yet. <br><small>Admin can mark products as featured from the admin panel.</small></p>
+        </div>
+    }
+    else
+    {
+        <div class="row g-4">
+            @foreach (var product in Model)
+            {
+                var img = product.Images?.FirstOrDefault()?.ImageUrl;
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card border-0 shadow-sm h-100 product-card" style="transition:transform 0.2s;">
+                        <div class="position-relative overflow-hidden" style="height:220px;">
+                            @if (!string.IsNullOrEmpty(img))
+                            {
+                                <img src="/@img.TrimStart('/')" alt="@product.Name"
+                                     class="w-100 h-100" style="object-fit:cover;" />
+                            }
+                            else
+                            {
+                                <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-light">
+                                    <i class="bi bi-image text-muted fs-1"></i>
+                                </div>
+                            }
+                            <span class="badge bg-dark position-absolute top-0 end-0 m-2">Featured</span>
+                        </div>
+                        <div class="card-body d-flex flex-column p-3">
+                            <div class="text-muted small mb-1">@product.Category?.Name</div>
+                            <h6 class="fw-semibold mb-1 flex-grow-1">
+                                <a asp-controller="Products" asp-action="Details" asp-route-id="@product.Id"
+                                   class="text-dark text-decoration-none stretched-link-text">@product.Name</a>
+                            </h6>
+                            <div class="d-flex justify-content-between align-items-center mt-2">
+                                <span class="fw-bold">$@product.Price.ToString("0.00")</span>
+                                <form asp-controller="Cart" asp-action="Add" method="post">
+                                    <input type="hidden" name="productId" value="@product.Id" />
+                                    <input type="hidden" name="quantity" value="1" />
+                                    <button type="submit" class="btn btn-dark btn-sm">
+                                        <i class="bi bi-bag-plus"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</section>
+
+<!-- CTA Banner -->
+<section class="mb-5">
+    <div class="p-5 text-center text-white rounded-3" style="background: linear-gradient(135deg, #2d2d2d, #555);">
+        <h3 class="fw-bold mb-2">Ready to explore more?</h3>
+        <p class="text-white-50 mb-4">Browse our full collection and find something you'll love.</p>
+        <a asp-controller="Products" asp-action="Index" class="btn btn-light btn-lg px-5 fw-semibold">Shop All Products</a>
+    </div>
+</section>
+
+<style>
+    .product-card:hover { transform: translateY(-4px); }
+    .category-card:hover { transform: translateY(-3px); }
+</style>

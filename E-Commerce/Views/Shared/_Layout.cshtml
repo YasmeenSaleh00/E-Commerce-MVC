@@ -76,9 +76,9 @@
                         <span class="badge rounded-circle bg-black text-white position-absolute top-0 start-100 translate-middle" style="font-size: 0.6rem;">0</span>
                     </a>
 
-                    <a asp-controller="Cart" asp-action="Index" class="text-dark mx-1 mx-sm-2 position-relative">
+                    <a asp-controller="Cart" asp-action="Index" class="text-dark mx-1 mx-sm-2 position-relative" id="cartLink">
                         <i class="bi bi-bag" style="font-size: 1.2rem;"></i>
-                        <span class="badge rounded-circle bg-black text-white position-absolute top-0 start-100 translate-middle" style="font-size: 0.6rem;">2</span>
+                        <span class="badge rounded-circle bg-black text-white position-absolute top-0 start-100 translate-middle" style="font-size: 0.6rem;" id="cartCount">@await Component.InvokeAsync("CartCount")</span>
                     </a>
 
                     <button class="navbar-toggler ms-2 border-0" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
