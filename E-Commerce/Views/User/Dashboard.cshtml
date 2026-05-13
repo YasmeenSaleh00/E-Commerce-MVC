@@ -1,0 +1,106 @@
+@model IEnumerable<E_Commerce.Models.Order>
+
+@{
+    ViewData["Title"] = "My Account";
+    var user = ViewBag.User as E_Commerce.Models.ApplicationUser;
+}
+
+<div class="container py-5">
+    <div class="row g-4">
+
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <div class="card border-0 shadow-sm p-4 text-center mb-3">
+                <div class="mb-3">
+                    <div class="rounded-circle bg-dark d-inline-flex align-items-center justify-content-center"
+                         style="width:72px;height:72px;">
+                        <i class="bi bi-person-fill text-white fs-2"></i>
+                    </div>
+                </div>
+                <div class="fw-bold">@user?.FirstName @user?.LastName</div>
+                <div class="text-muted small">@user?.Email</div>
+            </div>
+
+            <div class="list-group shadow-sm border-0">
+                <a href="#orders" class="list-group-item list-group-item-action active border-0 rounded-top">
+                    <i class="bi bi-bag-check me-2"></i>My Orders
+                </a>
+                <a asp-controller="Cart" asp-action="Index"
+                   class="list-group-item list-group-item-action border-0">
+                    <i class="bi bi-bag me-2"></i>My Cart
+                </a>
+                <a asp-controller="Products" asp-action="Index"
+                   class="list-group-item list-group-item-action border-0">
+                    <i class="bi bi-grid me-2"></i>Browse Shop
+                </a>
+                <form asp-area="Identity" asp-page="/Account/Logout"
+                      asp-route-returnUrl="@Url.Action("Index", "Home")" method="post">
+                    <button type="submit" class="list-group-item list-group-item-action border-0 text-danger rounded-bottom text-start w-100 bg-transparent">
+                        <i class="bi bi-box-arrow-right me-2"></i>Logout
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <div class="col-lg-9">
+            <h4 class="fw-bold mb-4" id="orders">
+                <i class="bi bi-bag-check me-2"></i>My Orders
+                <span class="badge bg-dark ms-2 fs-6">@Model.Count()</span>
+            </h4>
+
+            @if (!Model.Any())
+            {
+                <div class="card border-0 shadow-sm text-center py-5">
+                    <div>
+                        <i class="bi bi-bag-x text-muted" style="font-size:3.5rem;"></i>
+                        <h5 class="mt-3 text-muted">You haven't placed any orders yet.</h5>
+                        <a asp-controller="Products" asp-action="Index" class="btn btn-dark mt-3 px-4">Start Shopping</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="d-flex flex-column gap-3">
+                    @foreach (var order in Model)
+                    {
+                        var badgeCss = order.Status switch {
+                            E_Commerce.Models.OrderStatus.Pending    => "bg-warning text-dark",
+                            E_Commerce.Models.OrderStatus.Processing => "bg-info text-dark",
+                            E_Commerce.Models.OrderStatus.Shipped    => "bg-primary",
+                            E_Commerce.Models.OrderStatus.Delivered  => "bg-success",
+                            E_Commerce.Models.OrderStatus.Cancelled  => "bg-danger",
+                            _                                        => "bg-secondary"
+                        };
+                        <div class="card border-0 shadow-sm">
+                            <div class="card-body p-4">
+                                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-3">
+                                    <div>
+                                        <div class="fw-bold fs-5">#@order.Id</div>
+                                        <div class="text-muted small">
+                                            @order.OrderDate.ToLocalTime().ToString("MMMM dd, yyyy — HH:mm")
+                                        </div>
+                                    </div>
+                                    <span class="badge @badgeCss py-2 px-3">@order.Status</span>
+                                </div>
+
+                                <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                                    <div class="text-muted small">
+                                        @order.OrderItems.Count item(s) &nbsp;·&nbsp;
+                                        <span class="fw-semibold text-dark">
+                                            $@order.Total.ToString("0.00")
+                                        </span>
+                                    </div>
+                                    <a asp-action="OrderDetails" asp-route-id="@order.Id"
+                                       class="btn btn-sm btn-outline-dark">
+                                        View Details <i class="bi bi-arrow-right ms-1"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

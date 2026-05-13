@@ -64,3 +64,22 @@ body {
         color: #000;
         box-shadow: 0 0 20px var(--neon-primary);
     }
+
+/* Dark-themed form inputs for admin area */
+.admin-input {
+    background: rgba(255,255,255,0.05) !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    color: var(--text-main) !important;
+}
+
+.admin-input:focus {
+    background: rgba(255,255,255,0.08) !important;
+    border-color: var(--neon-primary) !important;
+    color: var(--text-main) !important;
+    box-shadow: 0 0 0 0.2rem var(--border-glow) !important;
+}
+
+.admin-input option {
+    background: var(--card-bg);
+    color: var(--text-main);
+}

@@ -2,110 +2,125 @@
 
 @{
     ViewData["Title"] = $"Order #{Model.Id}";
-    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
 }
 
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success alert-dismissible fade show mb-4">
-        @TempData["SuccessMessage"]
-        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-    </div>
-}
-
-<a asp-action="Index" class="btn btn-outline-secondary mb-4"><i class="bi bi-arrow-left me-1"></i>Back to Orders</a>
-
-<div class="row g-4">
-    <div class="col-lg-8">
-        <!-- Items -->
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-white py-3">
-                <h6 class="fw-bold mb-0">Order Items</h6>
-            </div>
-            <div class="card-body p-0">
-                <table class="table mb-0 align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th class="ps-4">Product</th>
-                            <th class="text-center">Qty</th>
-                            <th class="text-center">Unit Price</th>
-                            <th class="text-center">Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model.OrderItems)
-                        {
-                            <tr>
-                                <td class="ps-4 fw-semibold">@item.ProductName</td>
-                                <td class="text-center">@item.Quantity</td>
-                                <td class="text-center">$@item.UnitPrice.ToString("0.00")</td>
-                                <td class="text-center fw-semibold">$@item.TotalPrice.ToString("0.00")</td>
-                            </tr>
-                        }
-                    </tbody>
-                    <tfoot>
-                        <tr>
-                            <td colspan="3" class="text-end fw-bold ps-4">Total</td>
-                            <td class="text-center fw-bold fs-5">$@Model.Total.ToString("0.00")</td>
-                        </tr>
-                    </tfoot>
-                </table>
-            </div>
+<div class="container-fluid">
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="mb-4 p-3 rounded" style="background:rgba(0,255,128,0.08); border:1px solid rgba(0,255,128,0.3);">
+            <span style="color:#00ff80;"><i class="bi bi-check-circle me-2"></i>@TempData["SuccessMessage"]</span>
         </div>
+    }
 
-        <!-- Shipping -->
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-white py-3">
-                <h6 class="fw-bold mb-0">Shipping Information</h6>
+    <a asp-action="Index" class="btn btn-sm btn-outline-light mb-4">
+        <i class="bi bi-arrow-left me-1"></i> Back to Orders
+    </a>
+
+    <div class="row g-4">
+        <!-- Left: items + shipping -->
+        <div class="col-lg-8">
+            <div class="admin-card p-0 overflow-hidden mb-4">
+                <div class="p-3" style="border-bottom:1px solid rgba(255,255,255,0.08);">
+                    <h6 class="mb-0 text-white">Order Items</h6>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-dark align-middle mb-0" style="--bs-table-bg: transparent;">
+                        <thead style="background:rgba(0,0,0,0.3);">
+                            <tr class="text-secondary" style="border-color:rgba(255,255,255,0.08)!important;">
+                                <th class="ps-4">Product</th>
+                                <th class="text-center">Qty</th>
+                                <th class="text-center">Unit Price</th>
+                                <th class="text-center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.OrderItems)
+                            {
+                                <tr style="border-color:rgba(255,255,255,0.06)!important;">
+                                    <td class="ps-4 fw-semibold">@item.ProductName</td>
+                                    <td class="text-center">@item.Quantity</td>
+                                    <td class="text-center">$@item.UnitPrice.ToString("0.00")</td>
+                                    <td class="text-center" style="color:var(--neon-primary);">$@item.TotalPrice.ToString("0.00")</td>
+                                </tr>
+                            }
+                        </tbody>
+                        <tfoot>
+                            <tr style="border-color:rgba(255,255,255,0.08)!important;">
+                                <td colspan="3" class="text-end pe-3 fw-bold text-secondary ps-4">Order Total</td>
+                                <td class="text-center fw-bold fs-5" style="color:var(--neon-primary);">$@Model.Total.ToString("0.00")</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
             </div>
-            <div class="card-body">
-                <div class="row g-2">
-                    <div class="col-6"><span class="text-muted small">Name</span><div>@Model.ShippingFirstName @Model.ShippingLastName</div></div>
-                    <div class="col-6"><span class="text-muted small">Phone</span><div>@(Model.ShippingPhone ?? "—")</div></div>
-                    <div class="col-12"><span class="text-muted small">Address</span><div>@Model.ShippingAddress, @Model.ShippingCity, @Model.ShippingCountry @Model.ShippingPostalCode</div></div>
+
+            <div class="admin-card mb-4">
+                <h6 class="text-white mb-3">Shipping Information</h6>
+                <div class="row g-2 text-secondary">
+                    <div class="col-6">
+                        <div class="small text-secondary opacity-60">Name</div>
+                        <div class="text-white">@Model.ShippingFirstName @Model.ShippingLastName</div>
+                    </div>
+                    <div class="col-6">
+                        <div class="small text-secondary opacity-60">Phone</div>
+                        <div class="text-white">@(Model.ShippingPhone ?? "—")</div>
+                    </div>
+                    <div class="col-12">
+                        <div class="small text-secondary opacity-60">Address</div>
+                        <div class="text-white">@Model.ShippingAddress, @Model.ShippingCity, @Model.ShippingCountry @Model.ShippingPostalCode</div>
+                    </div>
                     @if (!string.IsNullOrEmpty(Model.Notes))
                     {
-                        <div class="col-12"><span class="text-muted small">Notes</span><div>@Model.Notes</div></div>
+                        <div class="col-12">
+                            <div class="small text-secondary opacity-60">Notes</div>
+                            <div class="text-white">@Model.Notes</div>
+                        </div>
                     }
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-lg-4">
-        <!-- Order Info -->
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-body p-4">
-                <h6 class="fw-bold mb-3">Order Info</h6>
-                <div class="mb-2"><span class="text-muted small d-block">Order #</span><strong>#@Model.Id</strong></div>
-                <div class="mb-2"><span class="text-muted small d-block">Date</span>@Model.OrderDate.ToLocalTime().ToString("MMM dd, yyyy HH:mm")</div>
-                <div class="mb-2"><span class="text-muted small d-block">Customer</span>@Model.User?.Email</div>
-                <div class="mb-2"><span class="text-muted small d-block">Payment</span>
-                    <span class="badge bg-success">@Model.PaymentStatus</span>
-                    <span class="ms-1 text-muted small">@Model.PaymentMethod</span>
+        <!-- Right: info + update status -->
+        <div class="col-lg-4">
+            <div class="admin-card mb-4">
+                <h6 class="text-white mb-3">Order Info</h6>
+                <div class="mb-2">
+                    <div class="small text-secondary opacity-60">Order #</div>
+                    <div style="color:var(--neon-primary);" class="fw-bold">#@Model.Id</div>
+                </div>
+                <div class="mb-2">
+                    <div class="small text-secondary opacity-60">Date</div>
+                    <div class="text-white">@Model.OrderDate.ToLocalTime().ToString("MMM dd, yyyy HH:mm")</div>
+                </div>
+                <div class="mb-2">
+                    <div class="small text-secondary opacity-60">Customer</div>
+                    <div class="text-white">@Model.User?.Email</div>
+                </div>
+                <div>
+                    <div class="small text-secondary opacity-60">Payment</div>
+                    <span class="badge border border-success text-success">@Model.PaymentStatus</span>
+                    <span class="ms-1 text-secondary small">@Model.PaymentMethod</span>
                 </div>
             </div>
-        </div>
 
-        <!-- Update Status -->
-        <div class="card border-0 shadow-sm">
-            <div class="card-body p-4">
-                <h6 class="fw-bold mb-3">Update Status</h6>
+            <div class="admin-card">
+                <h6 class="text-white mb-3">Update Status</h6>
                 @{
                     var currentBadge = Model.Status switch {
-                        E_Commerce.Models.OrderStatus.Pending => "bg-warning text-dark",
-                        E_Commerce.Models.OrderStatus.Processing => "bg-info text-dark",
-                        E_Commerce.Models.OrderStatus.Shipped => "bg-primary",
-                        E_Commerce.Models.OrderStatus.Delivered => "bg-success",
-                        E_Commerce.Models.OrderStatus.Cancelled => "bg-danger",
-                        _ => "bg-secondary"
+                        E_Commerce.Models.OrderStatus.Pending    => "border border-warning text-warning",
+                        E_Commerce.Models.OrderStatus.Processing => "border border-info text-info",
+                        E_Commerce.Models.OrderStatus.Shipped    => "btn-neon",
+                        E_Commerce.Models.OrderStatus.Delivered  => "border border-success text-success",
+                        E_Commerce.Models.OrderStatus.Cancelled  => "border border-danger text-danger",
+                        _                                        => "border border-secondary text-secondary"
                     };
                 }
-                <p>Current: <span class="badge @currentBadge">@Model.Status</span></p>
+                <p class="text-secondary mb-3">Current: <span class="badge @currentBadge">@Model.Status</span></p>
                 <form asp-action="UpdateStatus" method="post">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="id" value="@Model.Id" />
-                    <select name="status" class="form-select mb-3">
+                    <select name="status" class="form-select mb-3"
+                            style="background:var(--card-bg); color:var(--text-main); border-color:rgba(255,255,255,0.15);">
                         @foreach (var status in Enum.GetValues<E_Commerce.Models.OrderStatus>())
                         {
                             if (Model.Status == status)
@@ -118,7 +133,7 @@
                             }
                         }
                     </select>
-                    <button type="submit" class="btn btn-dark w-100">Update</button>
+                    <button type="submit" class="btn btn-neon w-100">Update Status</button>
                 </form>
             </div>
         </div>
